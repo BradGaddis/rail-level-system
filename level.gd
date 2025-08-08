@@ -41,10 +41,10 @@ signal mode_changed(prev_mode: LevelEnums.mode ,mode : LevelEnums.mode)
 @export var _gm: Node 
 
 ## The default rails character
-@export var default_rails_character : CharacterBody3D
+@export var default_rails_character : PackedScene
 
 ## The default walking character
-@export var default_walk_character : CharacterBody3D
+@export var default_walk_character : PackedScene
 
 ## The path that the player will follow in the rails component
 @onready var _player_path_follow: PathFollow3D = get_node_or_null("RailComponent/PlayerPathFollow")
@@ -78,6 +78,7 @@ var _last_frame_character_position: Vector3
 ## Sets up the opening cutscene and components, starts background track
 func _ready() -> void:
 	assert(_progress, "No progress resource assigned. It doesn't make sense to not have a progress measure")
+	_gm = Utils.find_game_manager()
 	if _background_track:
 		if _background_track is AudioStreamOggVorbis or _background_track is AudioStreamWAV:
 			_background_track.loop = true
@@ -129,7 +130,7 @@ func _load_player_in_level(_character: PackedScene) -> CharacterBody3D:
 	Utils.print("Loaded %s in %s" % [File.progress.current_character.name, self.name])
 	
 	File.progress.current_character.mode_changed.connect(_on_character_mode_changed)
-	File.progress.current_character.update_mode(_mode)
+	File.progress.current_character.update_mode(_mode as Enums.mode)
 	return File.progress.current_character
 
 ## Moves player along the provided rail path
@@ -165,8 +166,8 @@ func _default_rails_setup(_event_manager):
 
 ## if run_event not provided in inherited children, this is called when mode is free
 func _default_free_setup(_event_manager):
-	_em.load_player(_load_player_in_level(default_walk_character))
-	_em.snap_player_to_position(Vector3.ZERO)
+	_event_manager.load_player(_load_player_in_level(default_walk_character))
+	_event_manager.snap_player_to_position(Vector3.ZERO)
 	move_flag = false
 	_gm.end_event()
 
