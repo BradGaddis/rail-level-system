@@ -1,3 +1,6 @@
 [submodule "save-and-load-system"]
 	path = save-and-load-system
 	url = https://github.com/BradGaddis/save-and-load-system
+[submodule "music handler"]
+	path = music handler
+	url = https://github.com/BradGaddis/Godot-Music-Handler
