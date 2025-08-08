@@ -81,6 +81,7 @@ func _ready() -> void:
 	if _background_track:
 		if _background_track is AudioStreamOggVorbis or _background_track is AudioStreamWAV:
 			_background_track.loop = true
+			
 		Music.play_track(_background_track)
 		
 	#if _opening_cutscene:
@@ -123,7 +124,7 @@ func _unassign_player_from_rail():
 func _load_player_in_level(_character: PackedScene) -> CharacterBody3D:
 	var _updated_character = _character.instantiate()
 	if not File.progress.current_character or File.progress.current_character != _updated_character:
-		Utils.print("No character loaded in the file system. Loading ", _updated_character.name)
+		print("No character loaded in the file system. Loading ", _updated_character.name)
 		File.progress.current_character = _updated_character
 	Utils.print("Loaded %s in %s" % [File.progress.current_character.name, self.name])
 	
